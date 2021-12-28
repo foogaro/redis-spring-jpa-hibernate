@@ -51,7 +51,7 @@ So, during last iteration 1 million Movie objects will be serialized and deseria
 # Serialization
 During the iterations I collected all data, and here is what I found in regard to Serialization time (expressed in milliseconds):
 
-| Movie | Preparation Time | JdkSerializationRedisSerializer | GenericJackson2JsonRedisSerializer | Jackson2JsonRedisSerializer | Gson |
+| Movie | JavaFaker Time | JdkSerialization | GenericJackson2Json | Jackson2Json | Gson |
 |------:|-----------------:|--------------------------------:|-----------------------------------:|----------------------------:|-----:|
 |1|231|40|112|1|14|
 |10|377|25|99|3|22|
@@ -76,7 +76,7 @@ The best in performance is the Jackson2JsonRedisSerializer, which goes from few 
 # Deserialization
 During the iterations I collected all data, and here is what I found in regard to Deserialization time (expressed in milliseconds):
 
-| Movie | Preparation Time | JdkSerializationRedisSerializer | GenericJackson2JsonRedisSerializer | Jackson2JsonRedisSerializer | Gson |
+| Movie | JavaFaker Time | JdkSerialization | GenericJackson2Json | Jackson2Json | Gson |
 |------:|-----------------:|--------------------------------:|-----------------------------------:|----------------------------:|-----:|
 |1|231|9|72|1|5|
 |10|377|5|61|1|6|
@@ -99,7 +99,7 @@ JdkSerializationRedisSerializer is the best performer, almost x2 times faster th
 # Memory footprint
 During the iterations I collected all data, and here is what I found in regard to memory footprint (expressed in bytes):
 
-| Movie | Preparation Time | JdkSerializationRedisSerializer | GenericJackson2JsonRedisSerializer | Jackson2JsonRedisSerializer | Gson |
+| Movie | JavaFaker Time | JdkSerialization | GenericJackson2Json | Jackson2Json | Gson |
 |------:|-----------------:|--------------------------------:|-----------------------------------:|----------------------------:|-----:|
 |1|231|201|137|72|72|
 |10|377|586|1.053|619|619|
@@ -147,4 +147,8 @@ Sorry I couldn't use text representation, because its binary characters break Ma
 [{"id":0,"title":"The Other Side of Silence","rating":1,"year":1959}]
 ```
 
-
+# Disclaimer
+**The entire text must be considered as a personal note for my experiments.
+There is no way that those notes can be useful for anyone else rather than me.
+I'm just sharing. All the content here must not be taken as a source of truth.
+I have no responsibility of what you decide to do with my notes.**
