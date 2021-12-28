@@ -1,9 +1,10 @@
 package com.foogaro.data.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Movie {
+public class Movie implements Serializable {
 
     @Id
     @SequenceGenerator(name = "SEQ_GEN", sequenceName = "SEQ_MOVIE", allocationSize = 1)
