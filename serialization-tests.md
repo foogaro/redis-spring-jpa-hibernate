@@ -10,7 +10,11 @@ While playing with RedisSerializer, I decided to test a bit the performance of t
 2. JdkSerializationRedisSerializer is the default RedisSerializer used by the RedisCacheManager.
 
 # The test
+The test class can be found here:
+* [SerializationTests.java](src/test/java/com/foogaro/data/SerializationTests.java)
+
 The test I made is about serializing/deserializing a basic object like a Movie which has just 3 attributes: title, rating and year.
+
 
 ```java
 public class Movie implements Serializable {
