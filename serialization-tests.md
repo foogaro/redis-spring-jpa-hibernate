@@ -85,6 +85,7 @@ During the iterations I collected all data, and here is what I found in regard t
 |10.000|14.409|57|130|21|91|
 |100.000|138.382|340|244|135|298|
 |1.000.000|1.299.791|782|1.159|1.241|2.638|
+
 And a better view on a Column Chart:
 
 ![Deserialization Time](images/deserialization-time.png)
