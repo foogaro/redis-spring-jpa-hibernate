@@ -91,8 +91,10 @@ And a better view on a Column Chart:
 ![Deserialization Time](images/deserialization-time.png)
 
 ## Analysis
-Results here are a bit different. However, the GenericJackson2JsonRedisSerializer is still performing poorly until the very last iteration, where it actually performs as the second best.
+Results here are a bit different. However, the GenericJackson2JsonRedisSerializer is still performing poorly until the very last iteration, where it actually performs as the second best. 
+
 Jackson2JsonRedisSerializer performs very well at each iteration, but it's not the winner. Up to the second last iteration it's way better than its competitor performing between x2 and x3 times faster.
+
 In the last iteration everything changes.
 JdkSerializationRedisSerializer is the best performer, almost x2 times faster than the GenericJackson2JsonRedisSerializer and Jackson2JsonRedisSerializer, and more than x3 times faster than the Gson serializer.
 
@@ -114,8 +116,11 @@ And a better view on a Column Chart:
 ![Memory Allocation](images/memory-allocation.png)
 
 ## Analysis
-The GenericJackson2JsonRedisSerializer is the worst in memory allocation, except in the first iteration with 1 object. However, its memory allocation is x2 times bigger than Jackson2JsonRedisSerializer and Gson ones.
+The GenericJackson2JsonRedisSerializer is the worst in memory allocation, except in the first iteration with 1 object.
+However, its memory allocation is x2 times bigger than Jackson2JsonRedisSerializer and Gson ones.
+
 The Jackson2JsonRedisSerializer and Gson serializers are pretty much identical for memory allocation during all iterations.
+
 The JdkSerializationRedisSerializer is the best performer, due to its binary format in representing the serialized object.
 
 
@@ -162,7 +167,8 @@ From the above results I would prefer to got with the Jackson2JsonRedisSerialize
   - `:white_check_mark:` 65% lighter than GenericJackson2JsonRedisSerializer
   - `:white_check_mark:` 0.5% lighter than Gson
 
-So, the Jackson2JsonRedisSerializer is not the best in all, but my feelings is that it's average is better than all the others. When it is behind it's still not that far.
+So, the Jackson2JsonRedisSerializer is not the best in all, but my feelings is that its average it's better than all the others.
+When it is behind, it is not that far.
 
 
 # Disclaimer
