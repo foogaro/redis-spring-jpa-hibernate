@@ -147,6 +147,24 @@ Sorry I couldn't use text representation, because its binary characters break Ma
 [{"id":0,"title":"The Other Side of Silence","rating":1,"year":1959}]
 ```
 
+# Conclusions
+From the above results I would prefer to got with the Jackson2JsonRedisSerializer, because:
+* best performer in Serialization:
+  - `:white_check_mark:` 513% faster than JdkSerializationRedisSerializer
+  - `:white_check_mark:` 44% faster than GenericJackson2JsonRedisSerializer
+  - `:white_check_mark:` 286% faster than Gson
+* third performer in Deserialization:
+  - `:x:` 36% slower than JdkSerializationRedisSerializer
+  - `:x:` 6% slower than GenericJackson2JsonRedisSerializer
+  - `:white_check_mark:` 112% faster than Gson
+* third performer in Memory allocation:
+  - `:x:` 28% heavier than JdkSerializationRedisSerializer 
+  - `:white_check_mark:` 65% lighter than GenericJackson2JsonRedisSerializer
+  - `:white_check_mark:` 0.5% lighter than Gson
+
+So, the Jackson2JsonRedisSerializer is not the best in all, but my feelings is that it's average is better than all the others. When it is behind it's still not that far.
+
+
 # Disclaimer
 **The entire text must be considered as a personal note for my experiments.
 There is no way that those notes can be useful for anyone else rather than me.
