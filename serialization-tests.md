@@ -155,17 +155,17 @@ Sorry I couldn't use text representation, because its binary characters break Ma
 # Conclusions
 From the above results I would prefer to got with the Jackson2JsonRedisSerializer, because:
 * best performer in Serialization:
-  - `:white_check_mark:` 513% faster than JdkSerializationRedisSerializer
-  - `:white_check_mark:` 44% faster than GenericJackson2JsonRedisSerializer
-  - `:white_check_mark:` 286% faster than Gson
+  - :white_check_mark: 513% faster than JdkSerializationRedisSerializer
+  - :white_check_mark: 44% faster than GenericJackson2JsonRedisSerializer
+  - :white_check_mark: 286% faster than Gson
 * third performer in Deserialization:
-  - `:x:` 36% slower than JdkSerializationRedisSerializer
-  - `:x:` 6% slower than GenericJackson2JsonRedisSerializer
-  - `:white_check_mark:` 112% faster than Gson
+  - :x: 36% slower than JdkSerializationRedisSerializer
+  - :x: 6% slower than GenericJackson2JsonRedisSerializer
+  - :white_check_mark: 112% faster than Gson
 * third performer in Memory allocation:
-  - `:x:` 28% heavier than JdkSerializationRedisSerializer 
-  - `:white_check_mark:` 65% lighter than GenericJackson2JsonRedisSerializer
-  - `:white_check_mark:` 0.5% lighter than Gson
+  - :x: 28% heavier than JdkSerializationRedisSerializer 
+  - :white_check_mark: 65% lighter than GenericJackson2JsonRedisSerializer
+  - :white_check_mark: 0.5% lighter than Gson
 
 So, the Jackson2JsonRedisSerializer is not the best in all, but my feelings is that its average it's better than all the others.
 When it is behind, it is not that far.
