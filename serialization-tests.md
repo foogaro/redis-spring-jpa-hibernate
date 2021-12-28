@@ -162,7 +162,7 @@ From the above results I would prefer to got with the Jackson2JsonRedisSerialize
   - :x: 36% slower than JdkSerializationRedisSerializer
   - :x: 6% slower than GenericJackson2JsonRedisSerializer
   - :white_check_mark: 112% faster than Gson
-* third performer in Memory allocation:
+* second performer in Memory allocation:
   - :x: 28% heavier than JdkSerializationRedisSerializer 
   - :white_check_mark: 65% lighter than GenericJackson2JsonRedisSerializer
   - :white_check_mark: 0.5% lighter than Gson
