@@ -14,65 +14,94 @@ import java.util.List;
 
 public class SerializationTests {
 
-    public static void main(String[] args) {
-        JdkSerializationRedisSerializer jdkSeri = new JdkSerializationRedisSerializer();
-        GenericJackson2JsonRedisSerializer genJsonSeri = new GenericJackson2JsonRedisSerializer();
-        Jackson2JsonRedisSerializer jack2Seri = new Jackson2JsonRedisSerializer(Object.class);
-        Gson gson = new GsonBuilder().serializeNulls().create();
+    private static int NUMBER_OF_MOVIES = 1_000;
 
-        Movie movie = null;
-        int rating = 0;
-        int year = 0;
-        String title = null;
-        List<Object> list = new ArrayList<>();
-        int movies = 1;
+    public static void main(String[] args) {
+
+        if (args != null && args.length > 0) {
+            try {
+                NUMBER_OF_MOVIES = Integer.parseInt(args[0]);
+            } catch (NumberFormatException nfe) {
+                System.err.println("The value specified is an invalid number '" + args[0] + "'.\nUsing default number of movies: " + NUMBER_OF_MOVIES);
+            }
+        }
+
+        List<Movie> list = prepareData();
+
+        useJdkSerializationRedisSerializer(list);
+        useGenericJackson2JsonRedisSerializer(list);
+        useJackson2JsonRedisSerializer(list);
+        useGson(list);
+    }
+
+    private static List<Movie> prepareData() {
+        List<Movie> list = new ArrayList<>();
         long startDataPreparationTime = System.currentTimeMillis();
-        System.out.print("Data preparation for " + movies + " objects of type Movie...");
-        for(int i = 0; i < movies; i++){
-            rating = (int) ((Math.random() * (4)) + 1);
-            year = (int) ((Math.random() * (72)) + 1950);
-            title = new Faker().book().title();
-            list.add(new Movie(title,rating,year));
+        System.out.print("Data preparation for " + NUMBER_OF_MOVIES + " objects of type Movie...");
+        for(int i = 0; i < NUMBER_OF_MOVIES; i++){
+            list.add(generateMovie());
         }
         long endDataPreparationTime = System.currentTimeMillis() - startDataPreparationTime;
-        System.out.println(" done in " + endDataPreparationTime + "ms. Preparation avg took " + (endDataPreparationTime/movies) + "ms each.");
+        System.out.println(" done in " + endDataPreparationTime + "ms. Preparation avg took " + (endDataPreparationTime/NUMBER_OF_MOVIES) + "ms each.");
         System.out.println("");
+        return list;
+    }
+    private static Movie generateMovie() {
+        return new Movie(generateTitle(),generateRating(),generateYear());
+    }
+    private static String generateTitle() {
+        return new Faker().book().title();
+    }
+    private static int generateRating() {
+        return  (int) ((Math.random() * (4)) + 1);
+    }
+    private static int generateYear() {
+        return (int) ((Math.random() * (72)) + 1950);
+    }
 
+    private static void useJdkSerializationRedisSerializer(List<Movie> toSerialize) {
+        JdkSerializationRedisSerializer serializer = new JdkSerializationRedisSerializer();
         long serializationStartTime = System.currentTimeMillis();
-        byte[] serializedObject = jdkSeri.serialize(list);
+        byte[] serializedObject = serializer.serialize(toSerialize);
         long serializationTime = (System.currentTimeMillis() - serializationStartTime);
         int bytes = serializedObject.length;
         long deserializationStartTime = System.currentTimeMillis();
-        jdkSeri.deserialize(serializedObject);
+        serializer.deserialize(serializedObject);
         long deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
-        reportPerformance("JdkSerializationRedisSerializer", serializationTime, bytes, deserializationTime, serializedObject);
-
-        serializationStartTime = System.currentTimeMillis();
-        serializedObject = genJsonSeri.serialize(list);
-        serializationTime = (System.currentTimeMillis() - serializationStartTime);
-        bytes = serializedObject.length;
-        deserializationStartTime = System.currentTimeMillis();
-        genJsonSeri.deserialize(serializedObject);
-        deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
-        reportPerformance("GenericJackson2JsonRedisSerializer", serializationTime, bytes, deserializationTime, serializedObject);
-
-        serializationStartTime = System.currentTimeMillis();
-        serializedObject = jack2Seri.serialize(list);
-        serializationTime = (System.currentTimeMillis() - serializationStartTime);
-        bytes = serializedObject.length;
-        deserializationStartTime = System.currentTimeMillis();
-        jack2Seri.deserialize(serializedObject);
-        deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
-        reportPerformance("Jackson2JsonRedisSerializer", serializationTime, bytes, deserializationTime, serializedObject);
-
-        serializationStartTime = System.currentTimeMillis();
-        serializedObject = gson.toJson(list).getBytes();
-        serializationTime = (System.currentTimeMillis() - serializationStartTime);
-        bytes = serializedObject.length;
-        deserializationStartTime = System.currentTimeMillis();
-        gson.fromJson(new String(serializedObject), Object.class);
-        deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
-        reportPerformance("Gson", serializationTime, bytes, deserializationTime, serializedObject);
+        reportPerformance(serializer.getClass().getSimpleName(), serializationTime, bytes, deserializationTime, serializedObject);
+    }
+    private static void useGenericJackson2JsonRedisSerializer(List<Movie> toSerialize) {
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
+        long serializationStartTime = System.currentTimeMillis();
+        byte[] serializedObject = serializer.serialize(toSerialize);
+        long serializationTime = (System.currentTimeMillis() - serializationStartTime);
+        int bytes = serializedObject.length;
+        long deserializationStartTime = System.currentTimeMillis();
+        serializer.deserialize(serializedObject);
+        long deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
+        reportPerformance(serializer.getClass().getSimpleName(), serializationTime, bytes, deserializationTime, serializedObject);
+    }
+    private static void useJackson2JsonRedisSerializer(List<Movie> toSerialize) {
+        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
+        long serializationStartTime = System.currentTimeMillis();
+        byte[] serializedObject = serializer.serialize(toSerialize);
+        long serializationTime = (System.currentTimeMillis() - serializationStartTime);
+        int bytes = serializedObject.length;
+        long deserializationStartTime = System.currentTimeMillis();
+        serializer.deserialize(serializedObject);
+        long deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
+        reportPerformance(serializer.getClass().getSimpleName(), serializationTime, bytes, deserializationTime, serializedObject);
+    }
+    private static void useGson(List<Movie> toSerialize) {
+        Gson serializer = new GsonBuilder().serializeNulls().create();;
+        long serializationStartTime = System.currentTimeMillis();
+        byte[] serializedObject = serializer.toJson(toSerialize).getBytes();
+        long serializationTime = (System.currentTimeMillis() - serializationStartTime);
+        int bytes = serializedObject.length;
+        long deserializationStartTime = System.currentTimeMillis();
+        serializer.fromJson(new String(serializedObject), Object.class);
+        long deserializationTime = (System.currentTimeMillis() - deserializationStartTime);
+        reportPerformance(serializer.getClass().getSimpleName(), serializationTime, bytes, deserializationTime, serializedObject);
     }
 
     private static void reportPerformance(String serializer, long serializationTime, int bytes, long deserializationTime, byte[] serializedObject) {
@@ -80,7 +109,7 @@ public class SerializationTests {
         System.out.println("\tStart of serialization");
         System.out.println("\t\tSerialization ends, time-consuming: " + serializationTime + "ms");
         System.out.println("\t\tThe length after serialization is: " + bytes + " bytes");
-        if (serializedObject != null) System.out.println("\t\tThe serialized representation: " + new String(serializedObject));
+        //if (serializedObject != null) System.out.println("\t\tThe serialized representation: " + new String(serializedObject));
         System.out.println("\tBegin deserialization");
         System.out.println("\t\tDeserialization takes time: " + deserializationTime + "ms");
         System.out.println("==========================================================================================");
